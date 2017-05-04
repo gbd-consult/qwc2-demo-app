@@ -277,6 +277,36 @@ function wolfsburgResultGeometry(resultItem, callback) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+function duesselSearch(text, requestId, searchOptions, dispatch) {
+    let limit = 9;
+    let url = "/wms/duesseldorf?service=WFS&version=2.0.0&request=GetFeature&typeName=stadtteile&outputFormat=GeoJSON&filter=";
+    let filter =    "<Filter><PropertyIsLike wildcard='%' singleChar='_' escape='!'><PropertyName>NAME</PropertyName><Literal>%"
+                    + text + "%</Literal></PropertyIsLike></Filter>";
+    axios.get(url + encodeURIComponent(filter))
+    .then(response => dispatch(duesselSearchResults(response.data, requestId, limit)));
+}
+
+function duesselSearchResults(obj,requestId, limit) {
+    let results = [{
+        id: "staddteile",
+        title: "Stadtteile",
+        items: [] }];
+    (obj.features || []).map(entry => {
+            currentItem = {
+                id: entry.id,
+                text: entry.properties.name,
+                x: 0.5 * (entry.bbox[0] + entry.bbox[2]),
+                y: 0.5 * (entry.bbox[1] + entry.bbox[3]),
+                crs: "EPSG:25832",
+                provider: "duesseldorf"
+            };
+            results[0].items.push(currentItem);
+    });
+    return addSearchResults({data: results, provider: "duesseldorf", reqId: requestId}, true);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 function glarusSearch(text, requestId, searchOptions, dispatch) {
     let limit = 9;
     axios.get("https://map.geo.gl.ch/search/all?limit=" + limit + "&query="+ encodeURIComponent(text))
@@ -325,6 +355,10 @@ function glarusResultGeometry(resultItem, callback) {
 }
 
 module.exports = {
+    "duesseldorf": {
+        label : "Duesseldorf",
+        onSearch: duesselSearch
+    },
     "coordinates": {
         label: "Coordinates",
         onSearch: coordinatesSearch
