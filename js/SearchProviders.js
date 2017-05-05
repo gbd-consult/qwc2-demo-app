@@ -60,6 +60,7 @@
 const axios = require('axios');
 const {addSearchResults} = require("../qwc2/QWC2Components/actions/search");
 const CoordinatesUtils = require('../qwc2/MapStore2/web/client/utils/CoordinatesUtils');
+const wkt = require('wellknown');
 
 function coordinatesSearch(text, requestId, searchOptions, dispatch) {
     let displaycrs = searchOptions.displaycrs || "EPSG:4326";
@@ -297,12 +298,23 @@ function duesselSearchResults(obj,requestId, limit) {
                 text: entry.properties.name,
                 x: 0.5 * (entry.bbox[0] + entry.bbox[2]),
                 y: 0.5 * (entry.bbox[1] + entry.bbox[3]),
-                crs: "EPSG:25832",
-                provider: "duesseldorf"
+                bbox: entry.bbox.slice(0),
+                crs: "EPSG:4326",
+                provider: "duesseldorf",
+                geom : entry.geometry
             };
             results[0].items.push(currentItem);
+            console.log(currentItem);
     });
     return addSearchResults({data: results, provider: "duesseldorf", reqId: requestId}, true);
+}
+
+function duesselResultGeometry(resultItem, callback) {
+    let url = "/wms/duesseldorf?service=WFS&version=2.0.0&request=GetFeature&typeName=stadtteile&outputFormat=GeoJSON&featureID=";
+    console.log(resultItem);
+    axios.get(url + resultItem.id)
+    .then(response => callback(resultItem,
+        wkt.stringify(response.data.features[0].geometry), resultItem.crs));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -357,7 +369,8 @@ function glarusResultGeometry(resultItem, callback) {
 module.exports = {
     "duesseldorf": {
         label : "Duesseldorf",
-        onSearch: duesselSearch
+        onSearch: duesselSearch,
+        getResultGeometry: duesselResultGeometry
     },
     "coordinates": {
         label: "Coordinates",
