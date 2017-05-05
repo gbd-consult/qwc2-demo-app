@@ -310,11 +310,8 @@ function duesselSearchResults(obj,requestId, limit) {
 }
 
 function duesselResultGeometry(resultItem, callback) {
-    let url = "/wms/duesseldorf?service=WFS&version=2.0.0&request=GetFeature&typeName=stadtteile&outputFormat=GeoJSON&featureID=";
-    console.log(resultItem);
-    axios.get(url + resultItem.id)
-    .then(response => callback(resultItem,
-        wkt.stringify(response.data.features[0].geometry), resultItem.crs));
+    let wktGeometry = wkt.stringify(resultItem.geom);
+    callback(resultItem, wktGeometry, resultItem.crs);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
