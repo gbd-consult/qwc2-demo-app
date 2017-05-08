@@ -2,7 +2,7 @@
   "themes": {
     "items": [
       {
-        "url": "http://localhost/wms/duesseldorf",
+        "url": "/wms/duesseldorf",
         "format": "image/png;mode=8bit",
         "mapCrs": "EPSG:3857",
         "additionalMouseCrs": ["EPSG:25832"],

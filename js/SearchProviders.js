@@ -279,20 +279,28 @@ function wolfsburgResultGeometry(resultItem, callback) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function duesselSearch(text, requestId, searchOptions, dispatch) {
-    let limit = 9;
-    let url = "/wms/duesseldorf?service=WFS&version=2.0.0&request=GetFeature&typeName=stadtteile&outputFormat=GeoJSON&filter=";
+    let url = "/wms/duesseldorf?service=WFS&version=2.0.0&request=GetFeature&typeName=stadtteile,seen,fluesse,parks&outputFormat=GeoJSON&filter=";
     let filter =    "<Filter><PropertyIsLike wildcard='%' singleChar='_' escape='!'><PropertyName>NAME</PropertyName><Literal>%"
                     + text + "%</Literal></PropertyIsLike></Filter>";
     axios.get(url + encodeURIComponent(filter))
-    .then(response => dispatch(duesselSearchResults(response.data, requestId, limit)));
+    .then(response => dispatch(duesselSearchResults(response.data, requestId)));
 }
 
-function duesselSearchResults(obj,requestId, limit) {
-    let results = [{
-        id: "staddteile",
-        title: "Stadtteile",
-        items: [] }];
+function duesselSearchResults(obj, requestId) {
+    let results = [];
+    // create list of Result Categories
     (obj.features || []).map(entry => {
+        category = entry.id.slice(0,entry.id.lastIndexOf("."));
+        res = results.filter(x => x.id == category);
+        if (res.length < 1) {
+            results.push({
+                id: category,
+                title: category[0].toUpperCase() + category.slice(1),
+                items: []});
+        }});
+    // add Results
+    (obj.features || []).map(entry => {
+            category = entry.id.slice(0,entry.id.lastIndexOf("."));
             currentItem = {
                 id: entry.id,
                 text: entry.properties.name,
@@ -303,8 +311,8 @@ function duesselSearchResults(obj,requestId, limit) {
                 provider: "duesseldorf",
                 geom : entry.geometry
             };
-            results[0].items.push(currentItem);
-            console.log(currentItem);
+            results[results.findIndex(x => x.id == category)].items.push(currentItem);
+            console.log(category);
     });
     return addSearchResults({data: results, provider: "duesseldorf", reqId: requestId}, true);
 }
