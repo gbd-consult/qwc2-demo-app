@@ -312,7 +312,6 @@ function duesselSearchResults(obj, requestId) {
                 geom : entry.geometry
             };
             results[results.findIndex(x => x.id == category)].items.push(currentItem);
-            console.log(category);
     });
     return addSearchResults({data: results, provider: "duesseldorf", reqId: requestId}, true);
 }
