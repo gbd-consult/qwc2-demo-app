@@ -31,6 +31,7 @@
                 {"key": "ThemeSwitcher", "icon": "img/themes.svg"},
                 {"key": "LayerTree", "icon": "img/layers.svg"},
                 {"key": "Share", "icon": "img/share.svg"},
+                {"key": "Fnord", "icon": "img/share.svg"},
                 {"key": "Tools", "icon": "img/tools.svg", "subitems": [
                   {"key": "Measure", "icon": "img/measure_white.svg"},
                   {"key": "Draw", "icon": "img/draw.svg"},
@@ -69,6 +70,9 @@
         },
         {
           "name": "Share"
+        },
+        {
+          "name": "Fnord"
         },
         {
           "name": "Print"
@@ -135,6 +139,7 @@
                 {"key": "ThemeSwitcher", "icon": "img/themes.svg"},
                 {"key": "LayerTree", "icon": "img/layers.svg"},
                 {"key": "Share", "icon": "img/share.svg"},
+                {"key": "Fnord", "icon": "img/share.svg"},
                 {"key": "Tools", "icon": "img/tools.svg", "subitems": [
                   {"key": "Measure", "icon": "img/measure_white.svg"},
                   {"key": "Draw", "icon": "img/draw.svg"},
@@ -199,6 +204,9 @@
         },
         {
           "name": "Share"
+        },
+        {
+          "name": "Fnord"
         },
         {
           "name": "Print"
