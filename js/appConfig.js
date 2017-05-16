@@ -53,7 +53,7 @@ module.exports = {
             IdentifyPlugin: require('../qwc2/QWC2Components/plugins/Identify'),
             MapTipPlugin: require('../qwc2/QWC2Components/plugins/MapTip'),
             SharePlugin: require('../qwc2/QWC2Components/plugins/Share'),
-            ExamplePlugin: require('../qwc2/QWC2Components/plugins/Example'),
+            ZMFPlugin: require('../qwc2/QWC2Components/plugins/ZMF'),
             MapCopyrightPlugin: require('../qwc2/QWC2Components/plugins/MapCopyright'),
             PrintPlugin: require('../qwc2/QWC2Components/plugins/Print'),
             HelpPlugin: require('../qwc2/QWC2Components/plugins/Help')(renderHelp),
